@@ -57,9 +57,16 @@
             scanner = new Html5Qrcode('reader');
           }
 
-          await scanner.start(
-            { facingMode: 'environment' },
-            { fps: 10, qrbox: 230 },
+         await scanner.start(
+  { facingMode: 'environment' },
+  {
+    fps: 15,
+    qrbox: function(width, height) {
+      const size = Math.floor(Math.min(width, height) * 0.85);
+      return { width: size, height: size };
+    },
+    disableFlip: false
+  },
             function (decodedText) {
               result.textContent =
                 'QR code detected successfully!';
