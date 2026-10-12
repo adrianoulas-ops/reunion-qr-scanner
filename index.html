@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Reunion QR Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 480px;
+      margin: 30px auto;
+      padding: 16px;
+      text-align: center;
+    }
+    #reader {
+      width: 100%;
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      overflow-wrap: anywhere;
+    }
+    button {
+      padding: 14px;
+      font-size: 17px;
+      border: 0;
+      border-radius: 8px;
+      background: #174ea6;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>School Reunion QR Scanner</h2>
+  <p>Camera test only — no tickets will be checked in.</p>
+
+  <button id="start">Start Camera</button>
+  <div id="reader"></div>
+  <div id="result">Waiting to start camera...</div>
+
+  <script>
+    let scanner;
+
+    document.getElementById('start')
+      .addEventListener('click', async function () {
+        const result = document.getElementById('result');
+        result.textContent = 'Starting camera...';
+
+        try {
+          if (!scanner) {
+            scanner = new Html5Qrcode('reader');
+          }
+
+          await scanner.start(
+            { facingMode: 'environment' },
+            { fps: 10, qrbox: 230 },
+            function (decodedText) {
+              result.textContent =
+                'QR code detected successfully!';
+            },
+            function () {}
+          );
+
+          result.textContent = 'Camera ready. Scan a QR code.';
+        } catch (error) {
+          result.textContent =
+            'Camera error: ' + error.message;
+        }
+      });
+  </script>
+</body>
+</html>
